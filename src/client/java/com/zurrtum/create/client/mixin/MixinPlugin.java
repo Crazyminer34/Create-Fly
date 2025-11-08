@@ -14,12 +14,14 @@ public class MixinPlugin implements IMixinConfigPlugin {
     public static boolean SODIUM = false;
     public static boolean IRIS = false;
     public static boolean HMI = false;
+    public static boolean HAS_RENDER;
 
     @Override
     public void onLoad(String mixinPackage) {
         SODIUM = FabricLoader.getInstance().isModLoaded("sodium");
         IRIS = FabricLoader.getInstance().isModLoaded("iris");
         HMI = FabricLoader.getInstance().isModLoaded("holdmyitems");
+        HAS_RENDER = FabricLoader.getInstance().isModLoaded("fabric-rendering-fluids-v1");
     }
 
     @Override
@@ -52,9 +54,13 @@ public class MixinPlugin implements IMixinConfigPlugin {
         if (Create.Lazy) {
             mixins.add("FabricBlockStateModelMixin");
             mixins.add("WrapperBlockStateModelMixin");
+            mixins.add("FluidVariantRenderHandlerMixin");
         } else {
             mixins.add("CreativeInventoryScreenMixin");
             mixins.add("DefaultClientResourcePackProviderMixin");
+        }
+        if (HAS_RENDER) {
+            mixins.add("WaterRenderHandlerMixin");
         }
         return mixins;
     }
